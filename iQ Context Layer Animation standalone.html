@@ -38,6 +38,25 @@
   <div id="__bundler_loading">Unpacking...</div>
 
   <script>
+(function() {
+  var _orig = DOMParser.prototype.parseFromString;
+  DOMParser.prototype.parseFromString = function(str, type) {
+    var doc = _orig.call(this, str, type);
+    if (type === 'text/html') {
+      var style = doc.createElement('style');
+      style.textContent = [
+        'html, body { background: transparent !important; }',
+        'body > div { background: transparent !important; box-shadow: none !important; border: none !important; border-radius: 0 !important; }',
+        '* { box-shadow: none !important; }'
+      ].join(' ');
+      var head = doc.head || doc.documentElement;
+      head.insertBefore(style, head.firstChild);
+    }
+    return doc;
+  };
+})();
+</script>
+<script>
     
 document.addEventListener('DOMContentLoaded', async function() {
   const loading = document.getElementById('__bundler_loading');
